@@ -1,0 +1,315 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: devops.example.com
+spec:
+  api:
+    loadBalancer:
+      class: Network
+      subnets:
+      - name: utility-us-east-1a
+      - name: utility-us-east-1b
+      - name: utility-us-east-1c
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudLabels:
+    environment: case-study
+    managed-by: kops
+    project: devops-case-study
+  cloudProvider: aws
+  clusterAutoscaler:
+    awsUseStaticInstanceList: false
+    balanceSimilarNodeGroups: true
+    emitPerNodegroupMetrics: true
+    enabled: true
+    expander: least-waste
+  configBase: s3://devops-case-study-kops-state/devops.example.com
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1a
+      name: a
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1b
+      name: b
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1a
+      name: a
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1b
+      name: b
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubeProxy:
+    enabled: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 203.0.113.10/32
+  kubernetesVersion: 1.35.0
+  networkCIDR: 10.20.0.0/16
+  networking:
+    cilium:
+      enableNodePort: true
+  nodeTerminationHandler:
+    enableSQSTerminationDraining: true
+    enabled: true
+    prometheusEnable: true
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 203.0.113.10/32
+  subnets:
+  - cidr: 10.20.64.0/18
+    name: us-east-1a
+    type: Private
+    zone: us-east-1a
+  - cidr: 10.20.128.0/18
+    name: us-east-1b
+    type: Private
+    zone: us-east-1b
+  - cidr: 10.20.192.0/18
+    name: us-east-1c
+    type: Private
+    zone: us-east-1c
+  - cidr: 10.20.0.0/21
+    name: utility-us-east-1a
+    type: Utility
+    zone: us-east-1a
+  - cidr: 10.20.8.0/21
+    name: utility-us-east-1b
+    type: Utility
+    zone: us-east-1b
+  - cidr: 10.20.16.0/21
+    name: utility-us-east-1c
+    type: Utility
+    zone: us-east-1c
+  topology:
+    dns:
+      type: None
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: control-plane-us-east-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: control-plane-us-east-1a
+  role: Master
+  subnets:
+  - us-east-1a
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: control-plane-us-east-1b
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: control-plane-us-east-1b
+  role: Master
+  subnets:
+  - us-east-1b
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: control-plane-us-east-1c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: control-plane-us-east-1c
+  role: Master
+  subnets:
+  - us-east-1c
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: workers-ondemand-us-east-1a
+spec:
+  autoscale: true
+  cloudLabels:
+    capacity-profile: on-demand
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 3
+  minSize: 1
+  nodeLabels:
+    capacity-profile: on-demand
+    kops.k8s.io/instancegroup: workers-ondemand-us-east-1a
+  role: Node
+  subnets:
+  - us-east-1a
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: workers-ondemand-us-east-1b
+spec:
+  autoscale: true
+  cloudLabels:
+    capacity-profile: on-demand
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 3
+  minSize: 1
+  nodeLabels:
+    capacity-profile: on-demand
+    kops.k8s.io/instancegroup: workers-ondemand-us-east-1b
+  role: Node
+  subnets:
+  - us-east-1b
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: workers-ondemand-us-east-1c
+spec:
+  autoscale: true
+  cloudLabels:
+    capacity-profile: on-demand
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 3
+  minSize: 1
+  nodeLabels:
+    capacity-profile: on-demand
+    kops.k8s.io/instancegroup: workers-ondemand-us-east-1c
+  role: Node
+  subnets:
+  - us-east-1c
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: workers-mixed-us-east-1a
+spec:
+  autoscale: true
+  capacityRebalance: true
+  cloudLabels:
+    capacity-profile: mixed
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 5
+  minSize: 0
+  mixedInstancesPolicy:
+    instances:
+    - m7i.large
+    - m7a.large
+    - m6i.large
+    - m6a.large
+    onDemandAboveBase: 20
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    capacity-profile: mixed
+    kops.k8s.io/instancegroup: workers-mixed-us-east-1a
+  role: Node
+  subnets:
+  - us-east-1a
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: workers-mixed-us-east-1b
+spec:
+  autoscale: true
+  capacityRebalance: true
+  cloudLabels:
+    capacity-profile: mixed
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 5
+  minSize: 0
+  mixedInstancesPolicy:
+    instances:
+    - m7i.large
+    - m7a.large
+    - m6i.large
+    - m6a.large
+    onDemandAboveBase: 20
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    capacity-profile: mixed
+    kops.k8s.io/instancegroup: workers-mixed-us-east-1b
+  role: Node
+  subnets:
+  - us-east-1b
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: devops.example.com
+  name: workers-mixed-us-east-1c
+spec:
+  autoscale: true
+  capacityRebalance: true
+  cloudLabels:
+    capacity-profile: mixed
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: 5
+  minSize: 0
+  mixedInstancesPolicy:
+    instances:
+    - m7i.large
+    - m7a.large
+    - m6i.large
+    - m6a.large
+    onDemandAboveBase: 20
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    capacity-profile: mixed
+    kops.k8s.io/instancegroup: workers-mixed-us-east-1c
+  role: Node
+  subnets:
+  - us-east-1c

@@ -1,0 +1,92 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: {{ .clusterName }}
+  name: workers-mixed-us-east-1a
+spec:
+  autoscale: true
+  capacityRebalance: true
+  cloudLabels:
+    capacity-profile: mixed
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: {{ .workers.mixed.maxSize }}
+  minSize: {{ .workers.mixed.minSize }}
+  mixedInstancesPolicy:
+    instances:
+      - m7i.large
+      - m7a.large
+      - m6i.large
+      - m6a.large
+    onDemandAboveBase: {{ .workers.mixed.onDemandPercentage }}
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    capacity-profile: mixed
+    kops.k8s.io/instancegroup: workers-mixed-us-east-1a
+  role: Node
+  subnets:
+    - us-east-1a
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: {{ .clusterName }}
+  name: workers-mixed-us-east-1b
+spec:
+  autoscale: true
+  capacityRebalance: true
+  cloudLabels:
+    capacity-profile: mixed
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: {{ .workers.mixed.maxSize }}
+  minSize: {{ .workers.mixed.minSize }}
+  mixedInstancesPolicy:
+    instances:
+      - m7i.large
+      - m7a.large
+      - m6i.large
+      - m6a.large
+    onDemandAboveBase: {{ .workers.mixed.onDemandPercentage }}
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    capacity-profile: mixed
+    kops.k8s.io/instancegroup: workers-mixed-us-east-1b
+  role: Node
+  subnets:
+    - us-east-1b
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: {{ .clusterName }}
+  name: workers-mixed-us-east-1c
+spec:
+  autoscale: true
+  capacityRebalance: true
+  cloudLabels:
+    capacity-profile: mixed
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260610
+  machineType: m7i.large
+  maxSize: {{ .workers.mixed.maxSize }}
+  minSize: {{ .workers.mixed.minSize }}
+  mixedInstancesPolicy:
+    instances:
+      - m7i.large
+      - m7a.large
+      - m6i.large
+      - m6a.large
+    onDemandAboveBase: {{ .workers.mixed.onDemandPercentage }}
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    capacity-profile: mixed
+    kops.k8s.io/instancegroup: workers-mixed-us-east-1c
+  role: Node
+  subnets:
+    - us-east-1c

@@ -1,0 +1,16 @@
+clusterName: devops.example.com
+stateStore: s3://devops-case-study-kops-state
+environment: case-study
+
+apiAllowedCIDRs:
+  - 203.0.113.10/32
+
+workers:
+  ondemand:
+    minSize: 1
+    maxSize: 3
+  mixed:
+    minSize: 0
+    maxSize: 5
+    onDemandPercentage: 20
+
