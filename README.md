@@ -1,6 +1,7 @@
 # DevOps Case Study
 
-This repository is being implemented in independent, reviewable sections:
+This repository implements the complete DevOps case study in independent,
+reviewable sections:
 
 - [`kops/`](kops/) contains the parameterized AWS Kubernetes cluster design.
 - [`app/`](app/) contains the Dockerized Python CSV processor.
@@ -13,6 +14,8 @@ This repository is being implemented in independent, reviewable sections:
   and renders Helm values without storing credentials.
 - [`docs/devops-case-study-architecture.drawio`](docs/devops-case-study-architecture.drawio)
   is the editable end-to-end and Kubernetes runtime architecture diagram.
+- [`docs/devops-case-study-architecture.jpg`](docs/devops-case-study-architecture.jpg)
+  is a rendered preview of the architecture.
 - [`docs/local-kubernetes-runbook.md`](docs/local-kubernetes-runbook.md)
   documents how to deploy, verify, test, troubleshoot and clean up the
   application on Docker Desktop Kubernetes.

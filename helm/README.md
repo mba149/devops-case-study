@@ -26,9 +26,9 @@ with workload identity and pod IAM permissions.
 
 ## Versioning
 
-- Helm chart version: `0.1.0`
+- Helm chart version: `0.1.1`
 - Application version and image tag: `1.0.0`
-- Nginx image: `nginxinc/nginx-unprivileged:1.28.1-alpine`
+- Nginx image: `nginxinc/nginx-unprivileged:1.30.4-alpine`
 
 Increment the application image tag for every application release. Do not
 reuse `1.0.0` for different image contents.

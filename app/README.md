@@ -26,9 +26,11 @@ docker run --rm \
   -e AWS_REGION=us-east-2 \
   -e S3_BUCKET=bilal-spidersilk \
   -e S3_PREFIX=case-study-test/processed/ \
-  --mount type=bind,source=/absolute/path/to/.aws,target=/home/app/.aws,readonly \
+  --mount "type=bind,source=${HOME}/.aws,target=/home/app/.aws,readonly" \
   csv-processor:1.0.0
 ```
 
-Open <http://localhost:8080> and upload `soh-1-.csv`. The defaults use the bucket
-`bilal-spidersilk` in `us-east-2` and prefix `case-study-test/processed/`.
+Open <http://localhost:8080> and upload a three-column CSV file. This example uses
+the bucket `bilal-spidersilk` in `us-east-2` and the prefix
+`case-study-test/processed/`. The application itself has no default bucket; set
+`S3_BUCKET` explicitly for every environment.
