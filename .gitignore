@@ -1,0 +1,21 @@
+.DS_Store
+.env
+*.log
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+
+# OpenTofu local state and downloaded providers.
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Keep the reviewed example render, but ignore environment-specific output.
+kops/generated/*
+!kops/generated/example.yaml
+.kops-state/
