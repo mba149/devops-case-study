@@ -14,6 +14,8 @@ htmlcov/
 *.tfstate.*
 *.tfplan
 crash.log
+terraform.tfvars
+*.auto.tfvars
 
 # Keep the reviewed example render, but ignore environment-specific output.
 kops/generated/*

@@ -1,0 +1,9 @@
+aws_region              = "us-east-2"
+project_name            = "csv-processor"
+environment             = "dev"
+processed_prefix        = "processed/"
+glacier_transition_days = 30
+
+additional_tags = {
+  Owner = "platform-team"
+}
