@@ -10,7 +10,7 @@ does not contain a header row.
 ## Build the image
 
 ```bash
-docker build -t csv-processor:latest app
+docker build -t csv-processor:1.0.0 app
 ```
 
 ## Run against the test bucket
@@ -27,7 +27,7 @@ docker run --rm \
   -e S3_BUCKET=bilal-spidersilk \
   -e S3_PREFIX=case-study-test/processed/ \
   --mount type=bind,source=/absolute/path/to/.aws,target=/home/app/.aws,readonly \
-  csv-processor:latest
+  csv-processor:1.0.0
 ```
 
 Open <http://localhost:8080> and upload `soh-1-.csv`. The defaults use the bucket

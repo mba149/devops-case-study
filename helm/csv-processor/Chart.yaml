@@ -1,0 +1,6 @@
+apiVersion: v2
+name: csv-processor
+description: CSV processor with Nginx and Gunicorn in one Kubernetes Pod
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

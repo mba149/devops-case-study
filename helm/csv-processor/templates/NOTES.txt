@@ -1,0 +1,7 @@
+1. Wait for the Deployment:
+   kubectl rollout status deployment/{{ include "csv-processor.fullname" . }} -n {{ .Release.Namespace }}
+
+2. Forward the ClusterIP Service locally:
+   kubectl port-forward service/{{ include "csv-processor.fullname" . }} 8080:{{ .Values.service.port }} -n {{ .Release.Namespace }}
+
+3. Open http://localhost:8080

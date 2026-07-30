@@ -31,7 +31,7 @@ cp terraform.tfvars.example terraform.tfvars
 ## Create the bucket
 
 ```bash
-cd infrastructure/s3-lifecycle
+cd infrastructure/app
 tofu init
 tofu fmt -check
 tofu validate
