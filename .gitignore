@@ -21,3 +21,7 @@ terraform.tfvars
 kops/generated/*
 !kops/generated/example.yaml
 .kops-state/
+
+# Ansible runtime data and generated Helm environment values.
+ansible/.ansible/
+helm/environments/*-generated.yaml

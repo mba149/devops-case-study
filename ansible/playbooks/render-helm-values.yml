@@ -1,0 +1,42 @@
+---
+- name: Render environment-specific Helm values
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    generated_values_file: >-
+      {{ playbook_dir }}/../../helm/environments/{{ deployment_environment }}-generated.yaml
+
+  tasks:
+    - name: Validate application configuration
+      ansible.builtin.assert:
+        that:
+          - deployment_environment is match('^[a-z0-9][a-z0-9-]*[a-z0-9]$')
+          - application_image_repository | length > 0
+          - application_image_tag is match('^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$')
+          - application_image_pull_policy in ['Always', 'IfNotPresent', 'Never']
+          - aws_region | length > 0
+          - s3_bucket | length > 0
+          - s3_prefix | length > 0
+          - s3_prefix.endswith('/')
+          - autoscaling_min_replicas | int >= 1
+          - autoscaling_max_replicas | int >= autoscaling_min_replicas | int
+          - autoscaling_target_cpu_utilization | int >= 1
+          - autoscaling_target_cpu_utilization | int <= 100
+        fail_msg: Check the environment values in inventory group_vars.
+
+    - name: Ensure the Helm environment directory exists
+      ansible.builtin.file:
+        path: "{{ generated_values_file | dirname }}"
+        state: directory
+        mode: "0755"
+
+    - name: Render Helm values from application configuration
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/helm-values.yaml.j2"
+        dest: "{{ generated_values_file }}"
+        mode: "0644"
+
+    - name: Display the generated values path
+      ansible.builtin.debug:
+        msg: "Generated {{ generated_values_file }}"

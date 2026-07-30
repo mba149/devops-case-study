@@ -1,5 +1,10 @@
 # Kubernetes deployment with Helm
 
+For the complete Docker Desktop Kubernetes procedure, follow the
+[`local-kubernetes-runbook.md`](../docs/local-kubernetes-runbook.md). It covers
+the required tools, Ansible rendering, Secret creation, Helm deployment, smoke
+tests, troubleshooting and cleanup.
+
 The `csv-processor` chart deploys Nginx and the Python application as two
 containers in the same Pod. An init container uses the application image to
 copy packaged CSS and JavaScript into an `emptyDir` volume. Nginx mounts that
@@ -105,3 +110,6 @@ kubectl top pods --namespace csv-processor
 Create another values file under `helm/environments/` and override only the
 values that differ, such as the image tag, bucket, resource sizing and HPA
 limits. The reusable Kubernetes templates remain unchanged.
+
+For the case-study Ansible workflow, these environment values can instead be
+rendered from inventory variables as described in [`../ansible/README.md`](../ansible/README.md).

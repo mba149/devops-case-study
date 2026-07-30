@@ -1,0 +1,23 @@
+deployment_environment: docker-desktop
+
+application_image_repository: csv-processor
+application_image_tag: "1.0.0"
+application_image_pull_policy: IfNotPresent
+
+aws_region: us-east-2
+s3_bucket: bilal-spidersilk
+s3_prefix: processed/
+aws_credentials_secret_name: csv-processor-aws
+
+autoscaling_enabled: true
+autoscaling_min_replicas: 1
+autoscaling_max_replicas: 5
+autoscaling_target_cpu_utilization: 70
+
+app_cpu_request: 100m
+app_memory_request: 128Mi
+app_memory_limit: 256Mi
+
+nginx_cpu_request: 50m
+nginx_memory_request: 32Mi
+nginx_memory_limit: 64Mi
